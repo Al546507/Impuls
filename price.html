@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Прайс-лист — ООО «Импульс»</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .toolbar{position:sticky;top:0;background:#fff;border-bottom:1px solid #e5e7eb;padding:12px 0;margin-bottom:12px}
+    table{width:100%;border-collapse:collapse;background:#fff}
+    th,td{border:1px solid #e5e7eb;padding:8px;text-align:left}
+    th{background:#fafafa}
+    @media print { .toolbar, nav, .head-contacts{display:none} }
+  </style>
+</head>
+<body>
+  <header class="wrap row">
+    <div class="brand"><strong>ООО «Импульс» — Прайс-лист</strong></div>
+    <nav><a href="index.html#catalog">Каталог</a> <a href="index.html#contacts">Контакты</a></nav>
+    <div class="head-contacts"><a href="tel:+79932648400">+7 (993) 264-84-00</a> · <a href="mailto:alex546507@gmail.com">alex546507@gmail.com</a></div>
+  </header>
+
+  <div class="toolbar wrap row">
+    <button class="btn" onclick="window.print()">Печать / PDF</button>
+  </div>
+
+  <main class="wrap">
+    <h1>Прайс-лист</h1>
+    <p class="muted small">Цены ориентировочные («от…»). Актуальный прайс — по запросу.</p>
+    <table id="priceTable">
+      <thead>
+        <tr>
+          <th>SKU</th>
+          <th>Наименование</th>
+          <th>Категория</th>
+          <th>Цена</th>
+          <th>MOQ</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <script src="catalog.js"></script>
+  <script>
+    const tb = document.querySelector('#priceTable tbody')
+    CATALOG.forEach(it=>{
+      const tr = document.createElement('tr')
+      tr.innerHTML = '<td>'+it.id+'</td><td>'+it.title+'</td><td>'+it.category+'</td><td>'+it.price+'</td><td>'+it.moq+'</td>'
+      tb.appendChild(tr)
+    })
+  </script>
+</body>
+</html>
