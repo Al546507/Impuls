@@ -1,14 +1,57 @@
-const CATALOG = [
-{"id": "P-001", "title": "Кирпич керамический М150", "category": "Кирпич и блоки", "desc": "Размер 250×120×65 мм.", "price": "от 18 ₽ / шт", "moq": 1000, "image": "https://source.unsplash.com/1200x800/?brick+stack+construction"},
-{"id": "P-002", "title": "Кирпич облицовочный М150", "category": "Кирпич и блоки", "desc": "Ровная геометрия, оттенки на выбор.", "price": "от 27 ₽ / шт", "moq": 800, "image": "https://source.unsplash.com/1200x800/?bricks+wall"},
-{"id": "P-003", "title": "Блок газобетонный D500 600×250×200", "category": "Кирпич и блоки", "desc": "Паз‑гребень, точная геометрия.", "price": "от 145 ₽ / шт", "moq": 300, "image": "https://source.unsplash.com/1200x800/?aerated+concrete+blocks+pallet"},
-{"id": "P-004", "title": "Цемент ПЦ 500-Д0 (М500), 50 кг", "category": "Сыпучие материалы", "desc": "Для бетонов и растворов.", "price": "от 410 ₽ / мешок", "moq": 100, "image": "https://source.unsplash.com/1200x800/?cement+bags+warehouse"},
-{"id": "P-005", "title": "Песок карьерный, навалом", "category": "Сыпучие материалы", "desc": "Мытый, для растворов и подушек.", "price": "от 450 ₽ / т", "moq": 20, "image": "https://source.unsplash.com/1200x800/?sand+pile+construction+site"},
-{"id": "P-006", "title": "Щебень фракция 5–20", "category": "Сыпучие материалы", "desc": "Гранитный/известняковый.", "price": "от 1 200 ₽ / т", "moq": 20, "image": "https://source.unsplash.com/1200x800/?gravel+pile+construction"},
-{"id": "P-007", "title": "Плита перекрытия ПК 1.2×6.0 м", "category": "ЖБИ и плиты", "desc": "Заводские ЖБИ, паспорт качества.", "price": "от 12 900 ₽ / шт", "moq": 6, "image": "https://source.unsplash.com/1200x800/?concrete+slab+hollow+core"},
-{"id": "P-008", "title": "Блок ФБС 24‑4‑6", "category": "ЖБИ и плиты", "desc": "Бетон В15 и выше.", "price": "от 3 350 ₽ / шт", "moq": 20, "image": "https://source.unsplash.com/1200x800/?foundation+concrete+blocks+construction"},
-{"id": "P-009", "title": "Доска обрезная 25×100×6 м", "category": "Дерево и листовые", "desc": "Хвоя, камерной сушки.", "price": "от 14 500 ₽ / м³", "moq": 5, "image": "https://source.unsplash.com/1200x800/?lumber+stack+yard"},
-{"id": "P-010", "title": "Гипсокартон 12.5 мм (лист)", "category": "Дерево и листовые", "desc": "Стены и потолки, ГКЛ.", "price": "от 420 ₽ / лист", "moq": 50, "image": "https://source.unsplash.com/1200x800/?drywall+stack+construction"},
-{"id": "P-011", "title": "Минвата 50 мм (λ 0.037)", "category": "Отделочные материалы", "desc": "Плиты, негорючая НГ.", "price": "от 410 ₽ / м²", "moq": 200, "image": "https://source.unsplash.com/1200x800/?mineral+wool+insulation+package"},
-{"id": "P-012", "title": "Краска фасадная, 10 л", "category": "Отделочные материалы", "desc": "Акриловая, матовая.", "price": "от 1 950 ₽ / кан.", "moq": 10, "image": "https://source.unsplash.com/1200x800/?paint+buckets+construction"}
+const catalog = [
+  {
+    name: "Кирпич",
+    price: "от 15 ₽/шт",
+    image: "https://source.unsplash.com/600x400/?brick,construction"
+  },
+  {
+    name: "Цемент",
+    price: "от 280 ₽/мешок",
+    image: "https://source.unsplash.com/600x400/?cement,construction"
+  },
+  {
+    name: "Песок",
+    price: "от 500 ₽/тонна",
+    image: "https://source.unsplash.com/600x400/?sand,construction"
+  },
+  {
+    name: "Щебень",
+    price: "от 650 ₽/тонна",
+    image: "https://source.unsplash.com/600x400/?gravel,construction"
+  },
+  {
+    name: "Газоблоки",
+    price: "от 110 ₽/шт",
+    image: "https://source.unsplash.com/600x400/?aerated,block,construction"
+  },
+  {
+    name: "ЖБИ плиты",
+    price: "от 3500 ₽/шт",
+    image: "https://source.unsplash.com/600x400/?concrete,slab"
+  },
+  {
+    name: "Утеплитель (минвата)",
+    price: "от 850 ₽/упак",
+    image: "https://source.unsplash.com/600x400/?insulation,construction"
+  },
+  {
+    name: "Доска обрезная",
+    price: "от 9000 ₽/м³",
+    image: "https://source.unsplash.com/600x400/?lumber,wood"
+  },
+  {
+    name: "Гипсокартон",
+    price: "от 400 ₽/лист",
+    image: "https://source.unsplash.com/600x400/?drywall,construction"
+  },
+  {
+    name: "Краска",
+    price: "от 300 ₽/ведро",
+    image: "https://source.unsplash.com/600x400/?paint,bucket"
+  },
+  {
+    name: "Гвозди и саморезы",
+    price: "от 120 ₽/кг",
+    image: "https://source.unsplash.com/600x400/?nails,screws"
+  }
 ];
