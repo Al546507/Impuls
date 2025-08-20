@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Прайс-лист — Импульс</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="wrap row">
+    <strong>Импульс</strong>
+    <nav>
+      <a href="index.html#catalog">Каталог</a>
+      <a href="index.html#about">О компании</a>
+      <a href="price.html">Прайс-лист</a>
+      <a href="index.html#contacts">Контакты</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <h1>Прайс-лист</h1>
+    <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;width:100%;background:#fff">
+      <thead><tr><th>SKU</th><th>Наименование</th><th>Категория</th><th>Цена</th><th>MOQ</th></tr></thead>
+      <tbody id="tb"></tbody>
+    </table>
+  </main>
+
+  <script src="catalog/data.js"></script>
+  <script>
+    const tb = document.getElementById('tb');
+    (window.CATALOG||[]).forEach(it=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${it.id}</td><td>${it.title}</td><td>${it.category}</td><td>${it.price}</td><td>${it.moq}</td>`;
+      tb.appendChild(tr);
+    });
+  </script>
+</body>
+</html>
