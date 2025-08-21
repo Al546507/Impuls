@@ -1,12 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="260" height="60" viewBox="0 0 260 60">
-  <g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
-    <!-- импульсная линия -->
-    <path d="M6 35 H60 L75 10 L92 50 L118 12 L135 52 L148 35 H254"/>
-  </g>
-  <!-- подпись -->
-  <g fill="currentColor">
-    <text x="3" y="58" font-family="Inter,Arial,system-ui,-apple-system,Segoe UI,Roboto" font-size="26" font-weight="800" letter-spacing="1">
-      ИМПУЛЬС
-    </text>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Чёрный фон -->
+  <rect width="200" height="200" fill="#000000"/>
+
+  <!-- Линия-импульс -->
+  <path d="M30 100 H60 L75 60 L95 140 L120 40 L140 130 H170"
+        stroke="#FFFFFF" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Текст -->
+  <text x="100" y="180" font-family="Arial, sans-serif" font-size="36" 
+        font-weight="bold" fill="#FFFFFF" text-anchor="middle">ИМПУЛЬС</text>
 </svg>
