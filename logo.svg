@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="36" viewBox="0 0 150 36">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#3357ff"/>
+      <stop offset="1" stop-color="#1e3a8a"/>
+    </linearGradient>
+  </defs>
+  <!-- Значок -->
+  <rect x="2" y="4" rx="6" ry="6" width="28" height="28" fill="url(#g)"/>
+  <path d="M12 10 h8 a2 2 0 0 1 2 2 v12 a2 2 0 0 1-2 2 h-8 a2 2 0 0 1-2-2 v-12 a2 2 0 0 1 2-2 z" fill="#fff"/>
+  <rect x="16" y="12" width="4" height="12" rx="1" fill="url(#g)"/>
+  <!-- Надпись -->
+  <text x="38" y="24" font-family="Inter,Arial" font-size="18" font-weight="700" fill="#0b0f1a">ИМПУЛЬС</text>
+</svg>
