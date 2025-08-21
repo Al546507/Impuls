@@ -1,148 +1,184 @@
-// Константы: куда отправлять заказ (mailto)
-const ORDER_EMAIL = 'alex546507@gmail.com';
-const ORDER_PHONE = '+7 (993) 264-84-00';
+// ---- helpers ----
+const $ = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
 
-// ---- Иконки (вектор) ----
-function iconSvg(kind){
-  const stroke = '#0f172a';
-  const sw = 2.2;
-  switch(kind){
-    case 'brick':   return `<svg viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="6" y="14" width="52" height="24" rx="3" fill="#e2e8f0" stroke="${stroke}" stroke-width="${sw}"/>
-      <rect x="10" y="18" width="12" height="8" rx="1.5" fill="#fff" stroke="${stroke}" stroke-width="1.6"/>
-      <rect x="26" y="18" width="12" height="8" rx="1.5" fill="#fff" stroke="${stroke}" stroke-width="1.6"/>
-      <rect x="42" y="18" width="12" height="8" rx="1.5" fill="#fff" stroke="${stroke}" stroke-width="1.6"/>
-      <rect x="18" y="28" width="12" height="8" rx="1.5" fill="#fff" stroke="${stroke}" stroke-width="1.6"/>
-      <rect x="34" y="28" width="12" height="8" rx="1.5" fill="#fff" stroke="${stroke}" stroke-width="1.6"/>
-    </svg>`;
-    case 'aerated': return `<svg viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="6" y="12" width="52" height="24" rx="3" fill="#eef2ff" stroke="${stroke}" stroke-width="${sw}"/>
-      <circle cx="18" cy="24" r="2" fill="${stroke}" opacity=".3"/><circle cx="26" cy="18" r="1.6" fill="${stroke}" opacity=".3"/>
-      <circle cx="30" cy="26" r="1.4" fill="${stroke}" opacity=".25"/><circle cx="36" cy="21" r="2" fill="${stroke}" opacity=".28"/>
-      <circle cx="44" cy="26" r="1.8" fill="${stroke}" opacity=".3"/>
-    </svg>`;
-    case 'cement':  return `<svg viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M14 12h36l4 8-4 16H14L10 20l4-8Z" fill="#e5e7eb" stroke="${stroke}" stroke-width="${sw}" />
-      <path d="M20 22h24" stroke="${stroke}" stroke-width="2" stroke-linecap="round"/>
-    </svg>`;
-    case 'sand':    return `<svg viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 36h48L42 22l-8 4-6-10-8 12-12 8Z" fill="#fde68a" stroke="${stroke}" stroke-width="${sw}" />
-    </svg>`;
-    case 'gravel':  return `<svg viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g fill="#cbd5e1" stroke="${stroke}" stroke-width="1.5">
-        <circle cx="16" cy="30" r="6"/><circle cx="28" cy="26" r="5"/><circle cx="40" cy="30" r="7"/><circle cx="50" cy="26" r="4"/>
-      </g>
-    </svg>`;
-    case 'slab':    return `<svg viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="8" y="18" width="48" height="12" rx="3" fill="#e2e8f0" stroke="${stroke}" stroke-width="${sw}"/>
-      <circle cx="18" cy="24" r="2" fill="#94a3b8"/><circle cx="30" cy="24" r="2" fill="#94a3b8"/><circle cx="42" cy="24" r="2" fill="#94a3b8"/>
-    </svg>`;
-    case 'fbs':     return `<svg viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="8" y="16" width="48" height="16" rx="3" fill="#e2e8f0" stroke="${stroke}" stroke-width="${sw}"/>
-      <rect x="14" y="20" width="12" height="8" fill="#cbd5e1" rx="1.5"/><rect x="38" y="20" width="12" height="8" fill="#cbd5e1" rx="1.5"/>
-    </svg>`;
-    case 'roof':    return `<svg viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="8" y="14" width="48" height="20" rx="3" fill="#e0e7ff" stroke="${stroke}" stroke-width="${sw}"/>
-      <path d="M12 20h40M12 24h40M12 28h40" stroke="${stroke}" stroke-width="2" stroke-linecap="round"/>
-    </svg>`;
-    case 'wool':    return `<svg viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="10" y="14" width="44" height="20" rx="4" fill="#fff7ed" stroke="${stroke}" stroke-width="${sw}"/>
-      <path d="M14 24c6-6 12 6 18 0s12 6 18 0" stroke="${stroke}" stroke-width="2" stroke-linecap="round" opacity=".8"/>
-    </svg>`;
-    case 'drywall': return `<svg viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="12" y="14" width="40" height="20" rx="2" fill="#eef2f7" stroke="${stroke}" stroke-width="${sw}"/>
-      <rect x="16" y="16" width="40" height="20" rx="2" fill="#f8fafc" stroke="${stroke}" stroke-width="1.6"/>
-    </svg>`;
-    case 'wood':    return `<svg viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="10" y="16" width="44" height="6" rx="2" fill="#fde68a" stroke="${stroke}" stroke-width="${sw}"/>
-      <rect x="10" y="26" width="44" height="6" rx="2" fill="#fcd34d" stroke="${stroke}" stroke-width="${sw}"/>
-      <path d="M18 16v6M18 26v6M38 16v6M38 26v6" stroke="${stroke}" stroke-width="1.6"/>
-    </svg>`;
-    case 'paint':   return `<svg viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M22 14h20l4 8-4 12H22L18 22l4-8Z" fill="#e0e7ff" stroke="${stroke}" stroke-width="${sw}"/>
-      <path d="M26 26h12" stroke="${stroke}" stroke-width="2" stroke-linecap="round"/>
-      <path d="M46 34c6 0 6 8 0 8s-6-8 0-8Z" fill="#f43f5e" opacity=".7"/>
-    </svg>`;
-    default:        return `<svg viewBox="0 0 64 48" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="12" width="48" height="24" rx="4" fill="#e2e8f0"/></svg>`;
-  }
-}
+const money = n => new Intl.NumberFormat('ru-RU').format(n);
 
-// ---- Рендер каталога ----
-const grid = document.getElementById('grid');
-function render(items){
+// Плейсхолдер для картинок, если не загрузились
+const FALLBACK_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">
+  <rect width="100%" height="100%" fill="#f3f4f6"/>
+  <text x="50%" y="50%" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#9ca3af" text-anchor="middle" dy=".35em">фото будет позже</text>
+</svg>`);
+
+// ---- рендер каталога ----
+function renderCatalog(items){
+  const grid = $('#grid');
+  grid.setAttribute('aria-busy','true');
   grid.innerHTML = '';
-  if(!items.length){
-    grid.innerHTML = `<div class="muted">Ничего не найдено.</div>`;
-    return;
-  }
-  items.forEach(p=>{
-    const card = document.createElement('article');
+  items.forEach((it, idx) => {
+    const card = document.createElement('div');
     card.className = 'card';
-    card.innerHTML = `
-      <div class="img">${iconSvg(p.icon)}</div>
-      <div class="body">
-        <h3>${p.name}</h3>
-        <div class="meta">${p.category}</div>
-        <p class="price">от ${p.price.toLocaleString('ru-RU')} ${p.unit}</p>
-      </div>
-      <div class="actions"><button class="btn primary" data-id="${p.id}">Купить</button></div>
-    `;
-    grid.appendChild(card);
+
+    const img = document.createElement('img');
+    img.className = 'thumb';
+    img.loading = 'lazy';
+    img.alt = it.name;
+    img.src = it.image;
+    img.onerror = () => { img.src = FALLBACK_IMG; };
+
+    const h = document.createElement('h3');
+    h.className = 'title';
+    h.textContent = it.name;
+
+    const c = document.createElement('p');
+    c.className = 'cat';
+    c.textContent = it.category;
+
+    const p = document.createElement('div');
+    p.className = 'price';
+    p.textContent = it.price;
+
+    const btn = document.createElement('button');
+    btn.className = 'btn primary';
+    btn.textContent = 'Купить';
+    btn.addEventListener('click', () => addToCart(it));
+
+    card.append(img, h, c, p, btn);
+    grid.append(card);
   });
+  grid.setAttribute('aria-busy','false');
 }
 
-// ---- Поиск / фильтр ----
-const qEl = document.getElementById('search');
-const catEl = document.getElementById('category');
+// ---- фильтры ----
 function applyFilters(){
-  const q = (qEl.value||'').toLowerCase();
-  const cat = catEl.value||'';
-  const res = catalog.filter(it=>{
-    const passCat = !cat || it.category === cat;
-    const passQ = !q || [it.name,it.category].join(' ').toLowerCase().includes(q);
-    return passCat && passQ;
+  const q = ($('#search').value || '').toLowerCase().trim();
+  const cat = $('#category').value;
+  const list = catalog.filter(i => {
+    const okCat = !cat || i.category === cat;
+    const okQ = !q || i.name.toLowerCase().includes(q);
+    return okCat && okQ;
   });
-  render(res);
+  renderCatalog(list);
 }
-qEl.addEventListener('input',applyFilters);
-catEl.addEventListener('change',applyFilters);
 
-// ---- Корзина ----
-let cart = [];
-const cartBtn = document.getElementById('cartOpen');
-const cartPanel = document.getElementById('cartPanel');
-const cartClose = document.getElementById('cartClose');
-const cartItems = document.getElementById('cartItems');
-const cartTotal = document.getElementById('cartTotal');
-const cartCount = document.getElementById('cartCount');
-const checkoutBtn = document.getElementById('checkoutBtn');
+// ---- корзина ----
+const CART_KEY = 'impuls-cart-v1';
+const getCart = () => JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+const setCart = (v) => localStorage.setItem(CART_KEY, JSON.stringify(v));
 
-function addToCart(id){
-  const item = catalog.find(x=>x.id===id);
-  if(!item) return;
-  const exist = cart.find(x=>x.id===id);
-  if(exist) exist.qty += 1;
-  else cart.push({id:item.id, name:item.name, price:item.price, unit:item.unit, icon:item.icon, qty:1});
-  updateCart();
+function addToCart(item){
+  const cart = getCart();
+  const found = cart.find(x => x.name === item.name);
+  if (found) found.qty += 1;
+  else cart.push({ ...item, qty: 1, priceNum: guessPrice(item.price) });
+  setCart(cart);
+  updateCartBadge();
 }
-function updateCart(){
-  cartItems.innerHTML = cart.map(row=>`
-    <div class="cart-item">
-      <div class="thumb">${iconSvg(row.icon)}</div>
-      <div>
-        <h4>${row.name}</h4>
-        <div class="muted">от ${row.price.toLocaleString('ru-RU')} ${row.unit}</div>
-        <div class="qty">
-          <button data-dec="${row.id}">−</button>
-          <b>${row.qty}</b>
-          <button data-inc="${row.id}">+</button>
-          <button data-del="${row.id}" class="icon-btn" style="margin-left:8px">Удалить</button>
-        </div>
-      </div>
-      <div><strong>${(row.price*row.qty).toLocaleString('ru-RU')} ₽</strong></div>
-    </div>
-  `).join('');
-  const total = cart.reduce((s,x)=>s + x.price*x.qty, 0);
-  cartTotal.textContent = `${total.toLocaleString('ru-RU')} ₽`;
-  cartCount.textContent = cart.reduce((s,x)=>s+x.qty,0);
-  cartPanel.classList.toggle('open', cart
+
+function guessPrice(priceStr){
+  // из строки вида "от 520 ₽ / м²" берём число 520
+  const m = priceStr.replace(/\s/g,'').match(/(\d[\d]*)/);
+  return m ? Number(m[1]) : 0;
+}
+
+function updateCartBadge(){
+  const cart = getCart();
+  const count = cart.reduce((s,i)=>s+i.qty,0);
+  $('#cartCount').textContent = count;
+}
+
+function openModal(id){ const m = $(id); m.classList.add('show'); m.setAttribute('aria-hidden','false'); }
+function closeModal(id){ const m = $(id); m.classList.remove('show'); m.setAttribute('aria-hidden','true'); }
+
+function renderCart(){
+  const wrap = $('#cartItems');
+  const cart = getCart();
+  wrap.innerHTML = cart.length ? '' : '<p class="muted">Корзина пуста</p>';
+
+  let total = 0;
+
+  cart.forEach((it, idx) => {
+    total += it.priceNum * it.qty;
+
+    const row = document.createElement('div');
+    row.className = 'cart-row';
+
+    const im = document.createElement('img');
+    im.src = it.image; im.alt = it.name; im.onerror = ()=> im.src = FALLBACK_IMG;
+
+    const info = document.createElement('div');
+    info.innerHTML = `<div class="title">${it.name}</div><div class="cat">${it.price}</div>`;
+
+    const qty = document.createElement('div');
+    qty.className = 'qty';
+    const minus = document.createElement('button'); minus.textContent = '–';
+    const plus  = document.createElement('button'); plus.textContent = '+';
+    const n     = document.createElement('span'); n.textContent = it.qty;
+
+    minus.addEventListener('click',()=>{
+      const c = getCart();
+      if (c[idx].qty > 1) c[idx].qty -= 1; else c.splice(idx,1);
+      setCart(c); updateCartBadge(); renderCart();
+    });
+    plus.addEventListener('click',()=>{
+      const c = getCart();
+      c[idx].qty += 1;
+      setCart(c); updateCartBadge(); renderCart();
+    });
+
+    qty.append(minus,n,plus);
+
+    const sum = document.createElement('div');
+    sum.textContent = money(it.priceNum * it.qty) + ' ₽';
+
+    row.append(im, info, qty, sum);
+    wrap.append(row);
+  });
+
+  $('#cartTotal').textContent = money(total) + ' ₽';
+}
+
+// ---- оформление ----
+function sendOrder(formData){
+  // Для MVP оформляем простую «заявку»: собираем текст и открываем mailto:
+  const cart = getCart();
+  const lines = cart.map(i => `• ${i.name} × ${i.qty} = ${money(i.priceNum*i.qty)} ₽`).join('%0D%0A');
+  const total = money(cart.reduce((s,i)=>s+i.priceNum*i.qty,0)) + ' ₽';
+
+  const name = encodeURIComponent(formData.get('name'));
+  const phone = encodeURIComponent(formData.get('phone'));
+  const comment = encodeURIComponent(formData.get('comment') || '');
+
+  const subject = encodeURIComponent('Заказ с сайта ИМПУЛЬС');
+  const body =
+    `Имя: ${name}%0D%0AТелефон: ${phone}%0D%0AКомментарий: ${comment}%0D%0A%0D%0A` +
+    `Корзина:%0D%0A${lines}%0D%0AИтого: ${total}%0D%0A%0D%0A` +
+    `Связаться: ${encodeURIComponent(window.ORDER_PHONE)} / ${encodeURIComponent(window.ORDER_EMAIL)}`;
+
+  window.location.href = `mailto:${encodeURIComponent(window.ORDER_EMAIL)}?subject=${subject}&body=${body}`;
+}
+
+// ---- init ----
+document.addEventListener('DOMContentLoaded', () => {
+  renderCatalog(catalog);
+  updateCartBadge();
+
+  // фильтры
+  $('#search').addEventListener('input', applyFilters);
+  $('#category').addEventListener('change', applyFilters);
+
+  // корзина
+  $('#openCart').addEventListener('click', () => { renderCart(); openModal('#cartModal'); });
+  $('#closeCart').addEventListener('click', () => closeModal('#cartModal'));
+  $('#clearCart').addEventListener('click', () => { setCart([]); updateCartBadge(); renderCart(); });
+
+  // заказ
+  $('#checkoutBtn').addEventListener('click', () => { closeModal('#cartModal'); openModal('#orderModal'); });
+  $('#closeOrder').addEventListener('click', () => closeModal('#orderModal'));
+  $('#orderForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    sendOrder(fd);
+  });
+});
