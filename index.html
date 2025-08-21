@@ -3,88 +3,146 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ООО «Импульс» — Строительные материалы</title>
-  <meta name="description" content="Кирпич, блоки, цемент, ЖБИ, кровля, утеплитель, отделка. Опт и розница." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <title>Импульс — Строительные материалы</title>
+  <meta name="description" content="Кирпич, блоки, цемент, ЖБИ, кровля, утеплитель, листовые и отделочные материалы. Опт и розница." />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="wrap row between">
-    <div class="row">
-      <img src="logo.png?v=1" alt="Импульс" class="logo">
-      <div class="brand"><strong>ООО «Импульс»</strong></div>
-    </div>
-    <nav>
-      <a href="#catalog">Каталог</a>
-      <a href="#about">О компании</a>
-      <a href="#contacts">Контакты</a>
-    </nav>
-    <div class="head-contacts">
-      <a href="tel:+79932648400">+7 (993) 264-84-00</a> ·
-      <a href="mailto:alex546507@gmail.com">alex546507@gmail.com</a>
-    </div>
-  </header>
+<header class="wrap row between">
+  <div class="row gap">
+    <img src="logo.png" alt="Импульс" class="logo">
+    <div class="brand"><strong>ООО «Импульс»</strong></div>
+  </div>
 
-  <section class="hero">
-    <div class="wrap hero-inner">
-      <div class="hero-text">
-        <h1>Строительные материалы — опт и розница</h1>
-        <p>Кирпич и блоки, цемент, ЖБИ, кровля, утеплитель, листовые и отделочные материалы. Быстрая поставка под объект.</p>
-        <div class="row">
-          <a class="btn primary" href="#catalog">Смотреть каталог</a>
-          <a class="btn" href="tel:+79932648400">Позвонить</a>
-        </div>
-      </div>
-      <div class="hero-card">
-        <img src="https://source.unsplash.com/800x520/?construction,materials,warehouse" alt="Склад стройматериалов" loading="lazy" width="800" height="520">
+  <nav class="row gap">
+    <a href="#catalog">Каталог</a>
+    <a href="#about">О компании</a>
+    <a href="#contacts">Контакты</a>
+
+    <!-- Кнопка корзины -->
+    <button id="openCart" class="btn cart-btn" aria-label="Открыть корзину">
+      Корзина <span id="cartCount" class="badge">0</span>
+    </button>
+  </nav>
+
+  <div class="head-contacts">
+    <a href="tel:+79932648400">+7 (993) 264-84-00</a> ·
+    <a href="mailto:alex546507@gmail.com">alex546507@gmail.com</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-text">
+      <h1>Строительные материалы — опт и розница</h1>
+      <p>Кирпич и блоки, цемент, ЖБИ, кровля, утеплитель, листовые и отделочные материалы. Быстрая поставка под объект.</p>
+      <div class="row gap">
+        <a class="btn primary" href="#catalog">Смотреть каталог</a>
+        <a class="btn" href="tel:+79932648400">Позвонить</a>
       </div>
     </div>
+    <div class="hero-card">
+      <img src="https://source.unsplash.com/800x520/?construction,materials,warehouse" alt="Склад стройматериалов" loading="lazy" width="800" height="520">
+    </div>
+  </div>
+</section>
+
+<main class="wrap">
+  <section id="catalog">
+    <h2>Каталог</h2>
+
+    <div class="controls">
+      <input id="search" type="search" placeholder="Поиск по каталогу…" aria-label="Поиск">
+      <select id="category" aria-label="Категория">
+        <option value="">Все категории</option>
+        <option>Кирпич и блоки</option>
+        <option>Сыпучие материалы</option>
+        <option>ЖБИ и плиты</option>
+        <option>Кровля</option>
+        <option>Утеплитель</option>
+        <option>Листовые материалы</option>
+        <option>Дерево и пиломатериалы</option>
+        <option>Отделочные материалы</option>
+      </select>
+    </div>
+
+    <div id="grid" class="grid"></div>
+    <p class="muted small" id="price-note">*Цены «от». Актуальный прайс — по запросу.</p>
   </section>
 
-  <main class="wrap">
-    <section id="catalog">
-      <h2>Каталог</h2>
-      <div class="controls">
-        <input id="search" type="search" placeholder="Поиск по каталогу…" aria-label="Поиск">
-        <select id="category" aria-label="Категория">
-          <option value="">Все категории</option>
-          <option>Кирпич и блоки</option>
-          <option>Сыпучие материалы</option>
-          <option>ЖБИ и плиты</option>
-          <option>Кровля</option>
-          <option>Дерево и листовые</option>
-          <option>Отделочные материалы</option>
-        </select>
-      </div>
-      <div id="grid" class="grid"></div>
-      <p class="muted small">Цены «от…». Актуальный прайс — по запросу.</p>
-    </section>
+  <section id="about">
+    <h2>О компании</h2>
+    <p><strong>Импульс</strong> — надёжный поставщик строительных материалов. Работаем оптом и в розницу: кирпич, цемент, арматура, пиломатериалы, утеплители и другие материалы. Обеспечиваем качественную продукцию и своевременную поставку.</p>
+  </section>
 
-    <section id="about">
-      <h2>О компании</h2>
-      <p><strong>«Импульс»</strong> — надёжный поставщик строительных материалов. Работаем оптом и в розницу: кирпич, цемент, арматура, пиломатериалы, утеплители и другие материалы. Обеспечиваем качественную продукцию и своевременную поставку.</p>
-    </section>
+  <section id="contacts">
+    <h2>Контакты</h2>
+    <p><strong>Телефон:</strong> <a href="tel:+79932648400">+7 (993) 264-84-00</a> ·
+       <strong>E-mail:</strong> <a href="mailto:alex546507@gmail.com">alex546507@gmail.com</a></p>
+  </section>
+</main>
 
-    <section id="contacts">
-      <h2>Контакты</h2>
-      <p><strong>Телефон:</strong> <a href="tel:+79932648400">+7 (993) 264-84-00</a> · <strong>E-mail:</strong> <a href="mailto:alex546507@gmail.com">alex546507@gmail.com</a></p>
-    </section>
-  </main>
+<footer>
+  <div class="wrap row between">
+    <small>© ООО «Импульс»</small>
+    <small>
+      <a href="tel:+79932648400">+7 (993) 264-84-00</a> ·
+      <a href="mailto:alex546507@gmail.com">alex546507@gmail.com</a>
+    </small>
+  </div>
+</footer>
 
-  <footer>
-    <div class="wrap row between">
-      <small>© ООО «Импульс»</small>
-      <small><a href="tel:+79932648400">+7 (993) 264-84-00</a> · <a href="mailto:alex546507@gmail.com">alex546507@gmail.com</a></small>
+<!-- Боковая панель корзины -->
+<aside id="cartDrawer" class="drawer">
+  <div class="drawer-inner">
+    <div class="row between">
+      <h3>Корзина</h3>
+      <button id="closeCart" class="icon-btn" aria-label="Закрыть">✕</button>
     </div>
-  </footer>
-  
- <script>
-  // настройки заказа (можно поменять)
-  window.ORDER_EMAIL = "alex546507@gmail.com";
-  window.ORDER_PHONE = "+7 (993) 264-84-00";
+
+    <div id="cartItems" class="cart-items"></div>
+
+    <div class="cart-total row between">
+      <span>Итого:</span>
+      <strong id="cartTotal">—</strong>
+    </div>
+
+    <button id="checkoutBtn" class="btn primary full">Оформить заказ</button>
+  </div>
+</aside>
+
+<!-- Модалка оформления заказа -->
+<div id="orderModal" class="modal">
+  <div class="modal-inner">
+    <div class="row between">
+      <h3>Оформление заказа</h3>
+      <button id="closeOrder" class="icon-btn" aria-label="Закрыть">✕</button>
+    </div>
+
+    <form id="orderForm" class="form">
+      <label>Имя
+        <input name="name" required placeholder="Ваше имя">
+      </label>
+      <label>Телефон
+        <input name="phone" required placeholder="+7 ..." pattern="^[\d+()\-\s]{6,}$">
+      </label>
+      <label>Комментарий к заказу
+        <textarea name="comment" rows="3" placeholder="Адрес, способ связи и пр."></textarea>
+      </label>
+
+      <button type="submit" class="btn primary full">Отправить заказ</button>
+    </form>
+  </div>
+</div>
+
+<!-- Константы для отправки заказа (уже были у тебя) -->
+<script>
+  window.ORDER_EMAIL = 'alex546507@gmail.com';
+  window.ORDER_PHONE = '+7 (993) 264-84-00';
 </script>
+
 <script src="catalog.js"></script>
 <script src="script.js"></script>
 </body>
