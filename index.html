@@ -2,146 +2,128 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ИМПУЛЬС — Строительные материалы</title>
-  <meta name="description" content="Кирпич, блоки, цемент, ЖБИ, кровля, утеплитель, листовые и отделочные материалы. Быстрая поставка под объект. Опт и розница." />
-
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="icon" href="./logo.svg" type="image/svg+xml" />
 </head>
 <body>
-
-  <!-- Шапка -->
   <header class="header">
-    <a href="./" class="brand" aria-label="ИМПУЛЬС — на главную">
-      <img src="logo.svg" alt="ИМПУЛЬС" class="logo" width="130" height="30" />
-    </a>
-
-    <nav class="nav">
-      <a href="#catalog">Каталог</a>
-      <a href="#about">О компании</a>
-      <a href="#contacts">Контакты</a>
-    </nav>
-
-    <div class="contacts-top">
-      <a href="tel:+79932648400">+7 (993) 264-84-00</a>
-      <a href="mailto:alex546507@gmail.com">alex546507@gmail.com</a>
-      <button class="cart-btn" id="openCart" aria-label="Открыть корзину">
-        Корзина <span class="cart-badge" id="cartCount">0</span>
+    <div class="container header__inner">
+      <a href="/" class="logo" aria-label="Импульс — на главную">
+        <img src="./logo.svg" alt="ИМПУЛЬС" />
+      </a>
+      <nav class="nav">
+        <a href="#catalog">Каталог</a>
+        <a href="#about">О компании</a>
+        <a href="#contacts">Контакты</a>
+        <a href="tel:+79932648400">+7 (993) 264‑84‑00</a>
+        <a href="mailto:alex546507@gmail.com">alex546507@gmail.com</a>
+      </nav>
+      <button class="cart-btn" id="openCartBtn" aria-expanded="false">
+        🛒 <span id="cart-count">0</span>
       </button>
     </div>
   </header>
 
-  <!-- Хиро -->
-  <section class="hero">
-    <div class="hero-text">
-      <h1>Строительные материалы — опт и розница</h1>
-      <p>Кирпич и блоки, цемент, ЖБИ, кровля, утеплитель, листовые и отделочные материалы. Быстрая поставка под объект.</p>
-      <div class="hero-actions">
-        <a class="btn primary" href="#catalog">Смотреть каталог</a>
-        <a class="btn" href="tel:+79932648400">Позвонить</a>
-      </div>
-    </div>
-    <div class="hero-media">
-      <img
-        src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&auto=format&fit=crop&w=880&h=520"
-        alt="Стройплощадка"
-        loading="lazy" width="880" height="520"
-        onerror="this.src='images/placeholder-hero.svg'"
-      />
-    </div>
-  </section>
-
-  <!-- Каталог -->
   <main class="container">
-    <section id="catalog" class="catalog">
-      <h2>Каталог</h2>
+    <section class="hero">
+      <div class="hero__text">
+        <h1>Кирпич и блоки, цемент, ЖБИ, кровля, утеплитель, листовые и отделочные материалы.</h1>
+        <p>Быстрая поставка под объект.</p>
+        <div class="hero__actions">
+          <a class="btn" href="#catalog">Смотреть каталог</a>
+          <a class="btn btn--ghost" href="tel:+79932648400">Позвонить</a>
+        </div>
+      </div>
+      <div class="hero__image">
+        <img src="./images/hero.jpg" alt="Поставки строительных материалов" />
+      </div>
+    </section>
 
-      <div class="controls">
-        <input id="search" type="search" placeholder="Поиск по каталогу…" aria-label="Поиск" />
-        <select id="category" aria-label="Категория">
-          <option value="">Все категории</option>
-          <option>Кирпич и блоки</option>
-          <option>Сыпучие материалы</option>
-          <option>ЖБИ и плиты</option>
-          <option>Кровля</option>
-          <option>Утеплитель</option>
-          <option>Листовые материалы</option>
-          <option>Дерево и пиломатериалы</option>
-          <option>Отделочные материалы</option>
-        </select>
+    <section id="catalog" class="catalog">
+      <div class="catalog__head">
+        <h2>Каталог</h2>
+        <div class="catalog__filters">
+          <input id="search" class="input" placeholder="Поиск по каталогу…" />
+          <select id="category" class="input">
+            <option value="">Все категории</option>
+          </select>
+        </div>
       </div>
 
-      <p class="muted">Цены «от». Актуальный прайс — по запросу.</p>
+      <p class="note">Цены «от». Актуальный прайс — по запросу.</p>
 
-      <div id="grid" class="grid" aria-live="polite" aria-busy="false"></div>
-    </section>
-
-    <!-- О компании -->
-    <section id="about" class="about">
-      <h2>О компании</h2>
-      <p>Импульс — надёжный поставщик строительных материалов. Работаем оптом и в розницу: кирпич, цемент, арматура, пиломатериалы, утеплитель и другие материалы. Обеспечиваем качественную продукцию и своевременную поставку.</p>
-    </section>
-
-    <!-- Контакты -->
-    <section id="contacts" class="contacts">
-      <h2>Контакты</h2>
-      <p><strong>Телефон:</strong> <a href="tel:+79932648400">+7 (993) 264-84-00</a> • <strong>E-mail:</strong> <a href="mailto:alex546507@gmail.com">alex546507@gmail.com</a></p>
+      <div id="catalogGrid" class="grid"></div>
     </section>
   </main>
 
-  <!-- Модал: Корзина -->
-  <div class="modal" id="cartModal" aria-hidden="true">
-    <div class="modal__inner" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
-      <div class="modal__top">
-        <h3 id="cartTitle">Корзина</h3>
-        <button class="icon-btn" id="closeCart" aria-label="Закрыть">✕</button>
-      </div>
-
-      <div id="cartItems" class="cart-items"></div>
-
-      <div class="cart-total">
-        Итого: <span id="cartTotal">0 ₽</span>
-      </div>
-
-      <div class="cart-actions">
-        <button class="btn" id="clearCart">Очистить</button>
-        <button class="btn primary" id="checkoutBtn">Оформить заказ</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Модал: Заказ -->
-  <div class="modal" id="orderModal" aria-hidden="true">
-    <div class="modal__inner" role="dialog" aria-modal="true" aria-labelledby="orderTitle">
-      <div class="modal__top">
-        <h3 id="orderTitle">Оформление заказа</h3>
-        <button class="icon-btn" id="closeOrder" aria-label="Закрыть">✕</button>
-      </div>
-
-      <form id="orderForm" class="form">
-        <label>Имя
-          <input name="name" required placeholder="Ваше имя" />
-        </label>
-        <label>Телефон
-          <input name="phone" required placeholder="+7 ..." pattern="[\d\+\-\s\(\)]{6,}" />
-        </label>
-        <label>Комментарий к заказу
-          <textarea name="comment" rows="3" placeholder="Адрес, способ связи и пр."></textarea>
-        </label>
-
-        <button type="submit" class="btn primary full">Отправить заказ</button>
+  <!-- Модалка «Быстрый заказ» при нажатии «Купить» -->
+  <div class="modal" id="quickOrderModal" aria-hidden="true">
+    <div class="modal__inner" role="dialog" aria-labelledby="qomTitle">
+      <button class="modal__close" data-close>×</button>
+      <h3 id="qomTitle">Быстрый заказ</h3>
+      <form id="quickOrderForm" class="form">
+        <div class="form__row">
+          <label>Товар</label>
+          <input id="qoTitle" class="input" disabled />
+        </div>
+        <div class="form__row">
+          <label>Количество</label>
+          <input id="qoQty" class="input" type="number" min="1" step="1" value="1" />
+        </div>
+        <div class="form__actions">
+          <button type="submit" class="btn">Добавить в корзину</button>
+          <button type="button" class="btn btn--ghost" data-close>Отменить</button>
+        </div>
       </form>
     </div>
   </div>
 
-  <!-- Конфиг для отправки заявки -->
-  <script>
-    window.ORDER_EMAIL = 'alex546507@gmail.com';
-    window.ORDER_PHONE = '+7 (993) 264-84-00';
-  </script>
+  <!-- Модалка корзины / оформления -->
+  <div class="modal" id="cartModal" aria-hidden="true">
+    <div class="modal__inner" role="dialog" aria-labelledby="cartTitle">
+      <button class="modal__close" data-close>×</button>
+      <h3 id="cartTitle">Корзина</h3>
+      <div id="cartList" class="cart-list"></div>
+      <div class="cart-total">Итого: <span id="cartTotal">0 ₽</span></div>
 
-  <script src="catalog.js"></script>
-  <script src="script.js"></script>
+      <h4>Оформление заказа</h4>
+      <form id="checkoutForm" class="form">
+        <div class="form__row">
+          <label>Ваше имя*</label>
+          <input name="name" class="input" required />
+        </div>
+        <div class="form__row">
+          <label>Телефон*</label>
+          <input name="phone" class="input" required />
+        </div>
+        <div class="form__row">
+          <label>Email</label>
+          <input name="email" type="email" class="input" />
+        </div>
+        <div class="form__row">
+          <label>Комментарий</label>
+          <textarea name="comment" class="input" rows="3" placeholder="Адрес доставки, срок, условия разгрузки…"></textarea>
+        </div>
+        <div class="form__actions">
+          <button type="submit" class="btn">Отправить заказ</button>
+          <button type="button" class="btn btn--ghost" data-close>Закрыть</button>
+        </div>
+        <p class="muted">Нажимая «Отправить заказ», вы соглашаетесь с обработкой персональных данных.</p>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer" id="contacts">
+    <div class="container footer__inner">
+      <div>© ИМПУЛЬС</div>
+      <div>Тел.: <a href="tel:+79932648400">+7 (993) 264‑84‑00</a></div>
+      <div>Email: <a href="mailto:alex546507@gmail.com">alex546507@gmail.com</a></div>
+    </div>
+  </footer>
+
+  <script src="./catalog.js"></script>
+  <script src="./script.js"></script>
 </body>
 </html>
