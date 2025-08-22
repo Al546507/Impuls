@@ -55,24 +55,39 @@ function bindFilters(){
   apply();
 }
 
-// ===== quick order modal =====
-let QUICK_PRODUCT = null;
-
-function openModal(id){ const m=$(id); m.setAttribute('aria-hidden','false'); }
+// ===== modals =====
+function openModal(id){ const m=$(id); m?.setAttribute('aria-hidden','false'); }
 function closeModal(el){
-  const m = el.closest('.modal'); m?.setAttribute('aria-hidden','true');
+  const m = el.closest?.('.modal') || document.querySelector(el);
+  m?.setAttribute('aria-hidden','true');
 }
+
+// ===== quick order =====
+let QUICK_PRODUCT = null;
 
 function openQuickOrder(productId){
   const it = window.CATALOG.find(x=>x.id===productId);
   if(!it) return;
   QUICK_PRODUCT = it;
+
   $('#qoTitle').value = it.title;
   $('#qoQty').value = 1;
+  $('#qoPrice').textContent = `от ${money(it.priceFrom)} за ${it.unit}`;
+  updateQuickOrderSum();
+
   openModal('#quickOrderModal');
 }
+
+function updateQuickOrderSum(){
+  if(!QUICK_PRODUCT) return;
+  const qty = Math.max(1, Number($('#qoQty').value) || 1);
+  $('#qoQty').value = qty;
+  const sum = QUICK_PRODUCT.priceFrom * qty;
+  $('#qoSum').textContent = money(sum);
+}
+
 function addToCart(it, qty=1){
-  const n = Number(qty) || 1;
+  const n = Math.max(1, Number(qty) || 1);
   const idx = CART.findIndex(x=>x.id===it.id);
   if(idx>-1){ CART[idx].qty += n; }
   else { CART.push({ id: it.id, title: it.title, priceFrom: it.priceFrom, unit: it.unit, image: it.image, qty: n }); }
@@ -80,19 +95,21 @@ function addToCart(it, qty=1){
   renderCart();
   updateCount();
 }
-function updateCount(){
-  const cnt = CART.reduce((s,i)=>s+i.qty,0);
-  $('#cart-count').textContent = cnt;
-}
 
+// +/− в модалке
+$('#qoPlus')?.addEventListener('click', ()=>{ $('#qoQty').value = (Number($('#qoQty').value)||1) + 1; updateQuickOrderSum(); });
+$('#qoMinus')?.addEventListener('click', ()=>{ $('#qoQty').value = Math.max(1,(Number($('#qoQty').value)||1) - 1); updateQuickOrderSum(); });
+$('#qoQty')?.addEventListener('input', updateQuickOrderSum);
+
+// submit quick order
 $('#quickOrderForm')?.addEventListener('submit', e=>{
   e.preventDefault();
   addToCart(QUICK_PRODUCT, $('#qoQty').value);
-  closeModal(e.target);
+  closeModal('#quickOrderModal');
   openModal('#cartModal');
 });
 
-// делегирование «Купить»
+// делегирование кликов
 document.addEventListener('click', e=>{
   const buy = e.target.closest('[data-buy]');
   if(buy){ openQuickOrder(buy.getAttribute('data-buy')); }
@@ -116,9 +133,7 @@ document.addEventListener('click', e=>{
   }
 });
 
-$('#openCartBtn')?.addEventListener('click', ()=>{
-  openModal('#cartModal');
-});
+$('#openCartBtn')?.addEventListener('click', ()=> openModal('#cartModal') );
 
 // ===== cart render =====
 function renderCart(){
@@ -152,11 +167,16 @@ function renderCart(){
   $('#cartTotal').textContent = money(total);
 }
 
+function updateCount(){
+  const cnt = CART.reduce((s,i)=>s+i.qty,0);
+  $('#cart-count').textContent = cnt;
+}
+
 updateCount();
 renderCart();
 bindFilters();
 
-// ===== checkout (отправка на email через серверлес) =====
+// ===== checkout (заглушка без реальной отправки) =====
 $('#checkoutForm')?.addEventListener('submit', async (e)=>{
   e.preventDefault();
   if(CART.length===0){ alert('Корзина пуста'); return; }
@@ -178,10 +198,10 @@ $('#checkoutForm')?.addEventListener('submit', async (e)=>{
       body: JSON.stringify(payload)
     });
     if(!res.ok) throw new Error('Не удалось отправить заказ');
-    const data = await res.json();
+    await res.json();
     alert('Заказ отправлен! Мы свяжемся с вами.');
     CART = []; save('cart', CART); renderCart(); updateCount();
-    closeModal(e.target);
+    closeModal('#cartModal');
   }catch(err){
     console.error(err);
     alert('Ошибка отправки. Попробуйте позже или свяжитесь по телефону.');
