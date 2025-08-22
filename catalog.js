@@ -1,4 +1,4 @@
-// Стабильный каталог (картинки локально из /images)
+// Стабильный каталог. Картинки локально из /images
 window.CATALOG = [
   { id: 'kirpich-m150', title: 'Кирпич керамический М150', category: 'Кирпич и блоки', priceFrom: 18, unit: '₽ / шт', image: 'kirpich-m150.jpg' },
   { id: 'gazoblok-d500', title: 'Газоблок D500 600×250×200', category: 'Кирпич и блоки', priceFrom: 145, unit: '₽ / шт', image: 'gazoblok-d500.jpg' },
@@ -14,5 +14,4 @@ window.CATALOG = [
   { id: 'kraska-fasad-10', title: 'Краска фасадная 10 л', category: 'Отделочные материалы', priceFrom: 1690, unit: '₽ / шт', image: 'kraska-fasad-10.jpg' }
 ];
 
-// для селектора категорий
 window.CATEGORIES = [...new Set(window.CATALOG.map(i => i.category))];
