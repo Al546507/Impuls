@@ -1,184 +1,189 @@
-// ---- helpers ----
+// ===== helpers =====
 const $ = (sel, root=document) => root.querySelector(sel);
 const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+const money = n => (n).toLocaleString('ru-RU', { maximumFractionDigits: 0 }) + ' ₽';
 
-const money = n => new Intl.NumberFormat('ru-RU').format(n);
+const save = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+const load = (k,d)=>{ try{ return JSON.parse(localStorage.getItem(k)) ?? d }catch(e){ return d } };
 
-// Плейсхолдер для картинок, если не загрузились
-const FALLBACK_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">
-  <rect width="100%" height="100%" fill="#f3f4f6"/>
-  <text x="50%" y="50%" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#9ca3af" text-anchor="middle" dy=".35em">фото будет позже</text>
-</svg>`);
+let CART = load('cart', []); // [{id, title, priceFrom, unit, image, qty}]
 
-// ---- рендер каталога ----
-function renderCatalog(items){
-  const grid = $('#grid');
-  grid.setAttribute('aria-busy','true');
+// ===== catalog render =====
+function renderCatalog(list){
+  const grid = $('#catalogGrid');
   grid.innerHTML = '';
-  items.forEach((it, idx) => {
+  list.forEach(it=>{
     const card = document.createElement('div');
     card.className = 'card';
-
-    const img = document.createElement('img');
-    img.className = 'thumb';
-    img.loading = 'lazy';
-    img.alt = it.name;
-    img.src = it.image;
-    img.onerror = () => { img.src = FALLBACK_IMG; };
-
-    const h = document.createElement('h3');
-    h.className = 'title';
-    h.textContent = it.name;
-
-    const c = document.createElement('p');
-    c.className = 'cat';
-    c.textContent = it.category;
-
-    const p = document.createElement('div');
-    p.className = 'price';
-    p.textContent = it.price;
-
-    const btn = document.createElement('button');
-    btn.className = 'btn primary';
-    btn.textContent = 'Купить';
-    btn.addEventListener('click', () => addToCart(it));
-
-    card.append(img, h, c, p, btn);
-    grid.append(card);
+    card.innerHTML = `
+      <div class="card__media">
+        <img src="./images/${it.image || ''}" alt="${it.title}"
+             onerror="this.replaceWith(Object.assign(document.createElement('div'),{textContent:'фото будет позже',className:'badge'}))">
+      </div>
+      <div class="card__title">${it.title}</div>
+      <div class="card__cat">${it.category}</div>
+      <div class="card__price">от ${money(it.priceFrom)} <span class="unit">${it.unit}</span></div>
+      <div class="card__footer">
+        <span class="badge">В наличии</span>
+        <button class="btn" data-buy="${it.id}">Купить</button>
+      </div>`;
+    grid.appendChild(card);
   });
-  grid.setAttribute('aria-busy','false');
 }
 
-// ---- фильтры ----
-function applyFilters(){
-  const q = ($('#search').value || '').toLowerCase().trim();
-  const cat = $('#category').value;
-  const list = catalog.filter(i => {
-    const okCat = !cat || i.category === cat;
-    const okQ = !q || i.name.toLowerCase().includes(q);
-    return okCat && okQ;
+// фильтры
+function bindFilters(){
+  const catSel = $('#category');
+  window.CATEGORIES.forEach(c=>{
+    const o = document.createElement('option');
+    o.value = c; o.textContent = c; catSel.appendChild(o);
   });
-  renderCatalog(list);
+
+  function apply(){
+    const q = ($('#search').value || '').toLowerCase().trim();
+    const cat = catSel.value;
+    const list = window.CATALOG.filter(it=>{
+      const okCat = !cat || it.category === cat;
+      const okQ = !q || (it.title.toLowerCase().includes(q));
+      return okCat && okQ;
+    });
+    renderCatalog(list);
+  }
+
+  $('#search').addEventListener('input', apply);
+  catSel.addEventListener('change', apply);
+  apply();
 }
 
-// ---- корзина ----
-const CART_KEY = 'impuls-cart-v1';
-const getCart = () => JSON.parse(localStorage.getItem(CART_KEY) || '[]');
-const setCart = (v) => localStorage.setItem(CART_KEY, JSON.stringify(v));
+// ===== quick order modal =====
+let QUICK_PRODUCT = null;
 
-function addToCart(item){
-  const cart = getCart();
-  const found = cart.find(x => x.name === item.name);
-  if (found) found.qty += 1;
-  else cart.push({ ...item, qty: 1, priceNum: guessPrice(item.price) });
-  setCart(cart);
-  updateCartBadge();
+function openModal(id){ const m=$(id); m.setAttribute('aria-hidden','false'); }
+function closeModal(el){
+  const m = el.closest('.modal'); m?.setAttribute('aria-hidden','true');
 }
 
-function guessPrice(priceStr){
-  // из строки вида "от 520 ₽ / м²" берём число 520
-  const m = priceStr.replace(/\s/g,'').match(/(\d[\d]*)/);
-  return m ? Number(m[1]) : 0;
+function openQuickOrder(productId){
+  const it = window.CATALOG.find(x=>x.id===productId);
+  if(!it) return;
+  QUICK_PRODUCT = it;
+  $('#qoTitle').value = it.title;
+  $('#qoQty').value = 1;
+  openModal('#quickOrderModal');
+}
+function addToCart(it, qty=1){
+  const n = Number(qty) || 1;
+  const idx = CART.findIndex(x=>x.id===it.id);
+  if(idx>-1){ CART[idx].qty += n; }
+  else { CART.push({ id: it.id, title: it.title, priceFrom: it.priceFrom, unit: it.unit, image: it.image, qty: n }); }
+  save('cart', CART);
+  renderCart();
+  updateCount();
+}
+function updateCount(){
+  const cnt = CART.reduce((s,i)=>s+i.qty,0);
+  $('#cart-count').textContent = cnt;
 }
 
-function updateCartBadge(){
-  const cart = getCart();
-  const count = cart.reduce((s,i)=>s+i.qty,0);
-  $('#cartCount').textContent = count;
-}
+$('#quickOrderForm')?.addEventListener('submit', e=>{
+  e.preventDefault();
+  addToCart(QUICK_PRODUCT, $('#qoQty').value);
+  closeModal(e.target);
+  openModal('#cartModal');
+});
 
-function openModal(id){ const m = $(id); m.classList.add('show'); m.setAttribute('aria-hidden','false'); }
-function closeModal(id){ const m = $(id); m.classList.remove('show'); m.setAttribute('aria-hidden','true'); }
+// делегирование «Купить»
+document.addEventListener('click', e=>{
+  const buy = e.target.closest('[data-buy]');
+  if(buy){ openQuickOrder(buy.getAttribute('data-buy')); }
 
+  if(e.target.matches('[data-close]')){ closeModal(e.target); }
+
+  if(e.target.matches('.qty-btn[data-op]')){
+    const id = e.target.dataset.id;
+    const op = e.target.dataset.op;
+    const i = CART.findIndex(x=>x.id===id);
+    if(i>-1){
+      CART[i].qty += (op==='plus'?1:-1);
+      if(CART[i].qty<=0) CART.splice(i,1);
+      save('cart', CART); renderCart(); updateCount();
+    }
+  }
+  if(e.target.matches('.remove-btn')){
+    const id = e.target.dataset.id;
+    CART = CART.filter(x=>x.id!==id);
+    save('cart', CART); renderCart(); updateCount();
+  }
+});
+
+$('#openCartBtn')?.addEventListener('click', ()=>{
+  openModal('#cartModal');
+});
+
+// ===== cart render =====
 function renderCart(){
-  const wrap = $('#cartItems');
-  const cart = getCart();
-  wrap.innerHTML = cart.length ? '' : '<p class="muted">Корзина пуста</p>';
-
-  let total = 0;
-
-  cart.forEach((it, idx) => {
-    total += it.priceNum * it.qty;
-
+  const list = $('#cartList');
+  if(!list) return;
+  if(CART.length===0){
+    list.innerHTML = `<div class="muted">Корзина пуста</div>`;
+    $('#cartTotal').textContent = money(0);
+    return;
+  }
+  list.innerHTML = '';
+  CART.forEach(it=>{
     const row = document.createElement('div');
-    row.className = 'cart-row';
-
-    const im = document.createElement('img');
-    im.src = it.image; im.alt = it.name; im.onerror = ()=> im.src = FALLBACK_IMG;
-
-    const info = document.createElement('div');
-    info.innerHTML = `<div class="title">${it.name}</div><div class="cat">${it.price}</div>`;
-
-    const qty = document.createElement('div');
-    qty.className = 'qty';
-    const minus = document.createElement('button'); minus.textContent = '–';
-    const plus  = document.createElement('button'); plus.textContent = '+';
-    const n     = document.createElement('span'); n.textContent = it.qty;
-
-    minus.addEventListener('click',()=>{
-      const c = getCart();
-      if (c[idx].qty > 1) c[idx].qty -= 1; else c.splice(idx,1);
-      setCart(c); updateCartBadge(); renderCart();
-    });
-    plus.addEventListener('click',()=>{
-      const c = getCart();
-      c[idx].qty += 1;
-      setCart(c); updateCartBadge(); renderCart();
-    });
-
-    qty.append(minus,n,plus);
-
-    const sum = document.createElement('div');
-    sum.textContent = money(it.priceNum * it.qty) + ' ₽';
-
-    row.append(im, info, qty, sum);
-    wrap.append(row);
+    row.className = 'cart-item';
+    row.innerHTML = `
+      <img src="./images/${it.image || ''}" alt="${it.title}"
+           onerror="this.src='./images/placeholder.jpg'">
+      <div>
+        <div class="card__title">${it.title}</div>
+        <div class="card__cat">от ${money(it.priceFrom)} <span class="unit">${it.unit}</span></div>
+      </div>
+      <div class="cart-qty">
+        <button class="qty-btn" data-op="minus" data-id="${it.id}">−</button>
+        <div>${it.qty}</div>
+        <button class="qty-btn" data-op="plus" data-id="${it.id}">+</button>
+        <button class="remove-btn" title="Удалить" data-id="${it.id}">✕</button>
+      </div>`;
+    list.appendChild(row);
   });
-
-  $('#cartTotal').textContent = money(total) + ' ₽';
+  const total = CART.reduce((s,i)=>s + i.priceFrom*i.qty, 0);
+  $('#cartTotal').textContent = money(total);
 }
 
-// ---- оформление ----
-function sendOrder(formData){
-  // Для MVP оформляем простую «заявку»: собираем текст и открываем mailto:
-  const cart = getCart();
-  const lines = cart.map(i => `• ${i.name} × ${i.qty} = ${money(i.priceNum*i.qty)} ₽`).join('%0D%0A');
-  const total = money(cart.reduce((s,i)=>s+i.priceNum*i.qty,0)) + ' ₽';
+updateCount();
+renderCart();
+bindFilters();
 
-  const name = encodeURIComponent(formData.get('name'));
-  const phone = encodeURIComponent(formData.get('phone'));
-  const comment = encodeURIComponent(formData.get('comment') || '');
+// ===== checkout (отправка на email через серверлес) =====
+$('#checkoutForm')?.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  if(CART.length===0){ alert('Корзина пуста'); return; }
 
-  const subject = encodeURIComponent('Заказ с сайта ИМПУЛЬС');
-  const body =
-    `Имя: ${name}%0D%0AТелефон: ${phone}%0D%0AКомментарий: ${comment}%0D%0A%0D%0A` +
-    `Корзина:%0D%0A${lines}%0D%0AИтого: ${total}%0D%0A%0D%0A` +
-    `Связаться: ${encodeURIComponent(window.ORDER_PHONE)} / ${encodeURIComponent(window.ORDER_EMAIL)}`;
+  const form = new FormData(e.target);
+  const customer = Object.fromEntries(form.entries());
 
-  window.location.href = `mailto:${encodeURIComponent(window.ORDER_EMAIL)}?subject=${subject}&body=${body}`;
-}
+  const payload = {
+    customer,
+    cart: CART,
+    total: CART.reduce((s,i)=>s + i.priceFrom*i.qty, 0),
+    site: location.origin
+  };
 
-// ---- init ----
-document.addEventListener('DOMContentLoaded', () => {
-  renderCatalog(catalog);
-  updateCartBadge();
-
-  // фильтры
-  $('#search').addEventListener('input', applyFilters);
-  $('#category').addEventListener('change', applyFilters);
-
-  // корзина
-  $('#openCart').addEventListener('click', () => { renderCart(); openModal('#cartModal'); });
-  $('#closeCart').addEventListener('click', () => closeModal('#cartModal'));
-  $('#clearCart').addEventListener('click', () => { setCart([]); updateCartBadge(); renderCart(); });
-
-  // заказ
-  $('#checkoutBtn').addEventListener('click', () => { closeModal('#cartModal'); openModal('#orderModal'); });
-  $('#closeOrder').addEventListener('click', () => closeModal('#orderModal'));
-  $('#orderForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    sendOrder(fd);
-  });
+  try{
+    const res = await fetch('/api/order', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if(!res.ok) throw new Error('Не удалось отправить заказ');
+    const data = await res.json();
+    alert('Заказ отправлен! Мы свяжемся с вами.');
+    CART = []; save('cart', CART); renderCart(); updateCount();
+    closeModal(e.target);
+  }catch(err){
+    console.error(err);
+    alert('Ошибка отправки. Попробуйте позже или свяжитесь по телефону.');
+  }
 });
