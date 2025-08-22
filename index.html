@@ -56,22 +56,72 @@
 
       <div id="catalogGrid" class="grid"></div>
     </section>
+
+    <!-- О компании -->
+    <section id="about" class="section">
+      <div class="container">
+        <h2>О компании</h2>
+        <p>
+          Компания «ИМПУЛЬС» осуществляет комплексные поставки строительных материалов для частных и
+          корпоративных объектов. Мы работаем по прозрачным условиям, обеспечиваем предсказуемую логистику и
+          контролируем качество на каждом этапе — от подбора материалов до отгрузки и доставки.
+        </p>
+
+        <h3>Профиль деятельности</h3>
+        <ul>
+          <li>Кирпич и блоки, цемент, ЖБИ, инертные материалы (песок, щебень), кровля, утеплитель;</li>
+          <li>Листовые и отделочные материалы, пиломатериалы, сопутствующие товары;</li>
+          <li>Поставка «под объект»: подбор, консолидация и отгрузка партиями в согласованные сроки.</li>
+        </ul>
+
+        <h3>Преимущества</h3>
+        <ul>
+          <li><b>Предсказуемая логистика.</b> Поставляем в согласованные окна, работаем с проверенными перевозчиками;</li>
+          <li><b>Фиксация параметров.</b> Чёткая спецификация и подтверждение качества по каждому наименованию;</li>
+          <li><b>Коммерческие условия.</b> Индивидуальные прайс‑листы, варианты оплаты, отгрузка со складов партнёров;</li>
+          <li><b>Сопровождение сделки.</b> Один менеджер ведёт заказ от согласования до закрывающих документов.</li>
+        </ul>
+
+        <h3>Работа с заказами</h3>
+        <p>
+          Для получения актуального прайс‑листа и срока поставки отправьте заявку через корзину на сайте либо
+          свяжитесь с нами по телефону. Мы оперативно подготовим предложение с учётом объёма, графика и требований площадки.
+        </p>
+      </div>
+    </section>
   </main>
 
-  <!-- Модалка «Быстрый заказ» при нажатии «Купить» -->
+  <!-- Модалка «Быстрый заказ» -->
   <div class="modal" id="quickOrderModal" aria-hidden="true">
     <div class="modal__inner" role="dialog" aria-labelledby="qomTitle">
       <button class="modal__close" data-close>×</button>
       <h3 id="qomTitle">Быстрый заказ</h3>
+
       <form id="quickOrderForm" class="form">
         <div class="form__row">
           <label>Товар</label>
           <input id="qoTitle" class="input" disabled />
         </div>
+
+        <div class="form__row">
+          <label>Цена</label>
+          <div id="qoPrice" class="price-line">—</div>
+        </div>
+
         <div class="form__row">
           <label>Количество</label>
-          <input id="qoQty" class="input" type="number" min="1" step="1" value="1" />
+          <div class="qty-wrap">
+            <button class="qty-btn" type="button" id="qoMinus">−</button>
+            <input id="qoQty" class="input qty-input" type="number" min="1" step="1" value="1" />
+            <button class="qty-btn" type="button" id="qoPlus">+</button>
+          </div>
         </div>
+
+        <div class="form__row">
+          <label>Сумма</label>
+          <div id="qoSum" class="sum-line">—</div>
+        </div>
+
         <div class="form__actions">
           <button type="submit" class="btn">Добавить в корзину</button>
           <button type="button" class="btn btn--ghost" data-close>Отменить</button>
